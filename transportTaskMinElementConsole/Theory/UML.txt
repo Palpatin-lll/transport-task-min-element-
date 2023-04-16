@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+:Пользователь : as User
+rectangle "Транспортная задача" {
+Method_MinimalElement as (Метод минимального элемента)
+Method_SevZapUgol as (Метод Северо-заподного угла)
+VvodDann as (Ввод данных)
+User --> VvodDann
+User --> (Решение задачи)
+User --> (Получение данных)
+VvodDann ..> (Проверка заполненных данных): include
+VvodDann <.. (Чтение из файла): extend
+(Решение задачи) ..> (Выбор метода): include
+(Получение данных) ..> (Вывод данных в файл): include
+(Выбор метода) <.. Method_MinimalElement: extend
+(Выбор метода) <.. Method_SevZapUgol: extend
+}
+@enduml
