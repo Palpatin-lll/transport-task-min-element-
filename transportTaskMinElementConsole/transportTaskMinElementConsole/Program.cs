@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,40 +50,27 @@ namespace transportTaskMinElementConsole
 
                 int source = 0;
                 int dest = 0;
-                while (source < numSources && dest < numPuti)
+                for(int k = 0; k < numSources+numPuti-1; k++)
                 {
-                    int minCost = int.MaxValue;
+                    int minCost = 100000;
 
-                    //Поиск минимальной ячейки стоимоси в текущей строке
+                    for (int i = 0; i < numSources; i++)
+                    {
                     for (int j = 0; j < numPuti; j++)
                     {
-                        if (costs[source, j] < minCost && demands[0, j] > 0)
+                        if (costs[i,j] < minCost && demands[0,j] > 0 && allocations[i,j]==0 && supplies[i,0]>0)
                         {
-                            minCost = costs[source, j];
+                            minCost = costs[i,j];
                             dest = j;
+                            source = i;
                         }
                     }
-
-                    // Если не нашли ячейку с отрицательным коэффициентом, переходим к следующей строке
-                    if (minCost == int.MaxValue)
-                    {
-                        source++;
-                        continue;
                     }
-
-                    // По другому находим количество груза, которое можно перевезти
-                    int quantity = Math.Min(supplies[source, 0], demands[0, dest]);
-                    allocations[source, dest] = quantity;
-
-                    // Уменьшаем оставшиеся запасы и потребности
-                    supplies[source, 0] -= quantity;
-                    demands[0, dest] -= quantity;
-
-                    // Если запас выбранного склада закончился, переходим к следующему 
-                    if (supplies[source, 0] == 0)
-                        source++;
+                    int quantity = Math.Min(supplies[source,0], demands[0,dest]);
+                    allocations[source,dest] = quantity;
+                    supplies[source,0] -= quantity;
+                    demands[0,dest] -= quantity;
                 }
-
                 // Выводим результат
                 Console.WriteLine("Оптимальный план:");
                 for (int i = 0; i < numSources; i++)
